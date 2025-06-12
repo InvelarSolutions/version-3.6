@@ -155,7 +155,6 @@ export default function HomePage() {
   const [phoneCopied, setPhoneCopied] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [isVoiceflowChatOpen, setIsVoiceflowChatOpen] = useState(false);
-  const [voiceflowError, setVoiceflowError] = useState(false);
   const [screenDimensions, setScreenDimensions] = useState({ width: 1920, height: 1080 }); // Default server-safe values
   
   const emailBubbleRef = useRef<HTMLDivElement>(null);
@@ -180,18 +179,8 @@ export default function HomePage() {
     return () => window.removeEventListener('resize', updateScreenDimensions);
   }, []);
 
-  // Initialize Voiceflow chat widget with error handling
+  // Initialize Voiceflow chat widget
   useEffect(() => {
-    // Get Voiceflow project ID from environment variables
-    const voiceflowProjectId = import.meta.env.VITE_VOICEFLOW_PROJECT_ID;
-    
-    // Only initialize if project ID is available
-    if (!voiceflowProjectId) {
-      console.warn('Voiceflow project ID not configured. Voiceflow chat will not be available.');
-      setVoiceflowError(true);
-      return;
-    }
-
     // Create a separate container for Voiceflow outside of React's control
     const voiceflowDiv = document.createElement('div');
     voiceflowDiv.id = 'voiceflow-chat-root';
@@ -213,39 +202,25 @@ export default function HomePage() {
     document.body.appendChild(voiceflowDiv);
     voiceflowContainer.current = voiceflowDiv;
 
-    // Load Voiceflow script with error handling
+    // Load Voiceflow script
     const script = document.createElement('script');
     script.type = 'text/javascript';
-    
     script.onload = function() {
-      try {
-        if (window.voiceflow) {
-          voiceflowWidget.current = window.voiceflow.chat.load({
-            verify: { projectID: voiceflowProjectId },
-            url: 'https://general-runtime.voiceflow.com',
-            versionID: 'production',
-            voice: {
-              url: "https://runtime-api.voiceflow.com"
-            },
-            render: {
-              mode: 'embedded',
-              target: voiceflowDiv
-            }
-          });
-        } else {
-          throw new Error('Voiceflow library not loaded');
-        }
-      } catch (error) {
-        console.error('Failed to initialize Voiceflow widget:', error);
-        setVoiceflowError(true);
+      if (window.voiceflow) {
+        voiceflowWidget.current = window.voiceflow.chat.load({
+          verify: { projectID: '6846c5cea6a8e2a7db8c1327' },
+          url: 'https://general-runtime.voiceflow.com',
+          versionID: 'production',
+          voice: {
+            url: "https://runtime-api.voiceflow.com"
+          },
+          render: {
+            mode: 'embedded',
+            target: voiceflowDiv
+          }
+        });
       }
     };
-
-    script.onerror = function() {
-      console.error('Failed to load Voiceflow script');
-      setVoiceflowError(true);
-    };
-    
     script.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
     
     document.head.appendChild(script);
@@ -263,7 +238,7 @@ export default function HomePage() {
 
   // Control Voiceflow chat visibility
   useEffect(() => {
-    if (voiceflowContainer.current && !voiceflowError) {
+    if (voiceflowContainer.current) {
       if (isVoiceflowChatOpen) {
         voiceflowContainer.current.style.opacity = '1';
         voiceflowContainer.current.style.transform = 'translateY(0)';
@@ -274,7 +249,7 @@ export default function HomePage() {
         voiceflowContainer.current.style.pointerEvents = 'none';
       }
     }
-  }, [isVoiceflowChatOpen, voiceflowError]);
+  }, [isVoiceflowChatOpen]);
 
   // Handle clicking outside email bubble
   useEffect(() => {
@@ -338,12 +313,7 @@ export default function HomePage() {
   };
 
   const handleVoiceflowChatClick = () => {
-    if (voiceflowError) {
-      // Fallback to enhanced chatbot if Voiceflow fails
-      setIsChatbotOpen(true);
-    } else {
-      setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
-    }
+    setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
   };
 
   const handleMailClick = () => {
@@ -548,7 +518,7 @@ export default function HomePage() {
             variant="outline"
             size="sm"
             className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300 p-2"
-            title={voiceflowError ? t('nav.aiChat') + ' (Fallback)' : t('nav.aiChat')}
+            title={t('nav.aiChat')}
           >
             <MessageCircle className="h-4 w-4 text-black" />
           </Button>
@@ -600,7 +570,6 @@ export default function HomePage() {
                 variant="outline"
                 size="sm"
                 className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300 w-fit"
-                title={voiceflowError ? t('nav.aiChat') + ' (Fallback)' : t('nav.aiChat')}
               >
                 <MessageCircle className="h-4 w-4 mr-2 text-black" />
                 {t('nav.aiChat')}
