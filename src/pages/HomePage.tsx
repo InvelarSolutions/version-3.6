@@ -147,7 +147,7 @@ const useIntersectionObserver = (options = {}) => {
 };
 
 export default function HomePage() {
-  const { t, showLanguagePopup, setLanguage } = useLanguageContext();
+  const { t, showLanguagePopup, setLanguage, currentLanguage } = useLanguageContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showEmailBubble, setShowEmailBubble] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
@@ -163,6 +163,7 @@ export default function HomePage() {
   const phoneButtonRef = useRef<HTMLButtonElement>(null);
   const voiceflowWidget = useRef<any>(null);
   const voiceflowContainer = useRef<HTMLDivElement>(null);
+  const voiceflowScriptLoaded = useRef<boolean>(false);
 
   // Set screen dimensions after component mounts on client side
   useEffect(() => {
@@ -179,8 +180,11 @@ export default function HomePage() {
     return () => window.removeEventListener('resize', updateScreenDimensions);
   }, []);
 
-  // Initialize Voiceflow chat widget
+  // Initialize Voiceflow chat widget based on language
   useEffect(() => {
+    // Only initialize if language popup is not showing (user has selected a language)
+    if (showLanguagePopup) return;
+
     // Create a separate container for Voiceflow outside of React's control
     const voiceflowDiv = document.createElement('div');
     voiceflowDiv.id = 'voiceflow-chat-root';
@@ -202,39 +206,56 @@ export default function HomePage() {
     document.body.appendChild(voiceflowDiv);
     voiceflowContainer.current = voiceflowDiv;
 
-    // Load Voiceflow script
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.onload = function() {
-      if (window.voiceflow) {
-        voiceflowWidget.current = window.voiceflow.chat.load({
-          verify: { projectID: '6846c5cea6a8e2a7db8c1327' },
-          url: 'https://general-runtime.voiceflow.com',
-          versionID: 'production',
-          voice: {
-            url: "https://runtime-api.voiceflow.com"
-          },
-          render: {
-            mode: 'embedded',
-            target: voiceflowDiv
-          }
-        });
+    // Load Voiceflow script if not already loaded
+    if (!voiceflowScriptLoaded.current) {
+      const script = document.createElement('script');
+      script.type = 'text/javascript';
+      script.onload = function() {
+        voiceflowScriptLoaded.current = true;
+        loadVoiceflowWidget();
+      };
+      script.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
+      document.head.appendChild(script);
+    } else {
+      // Script already loaded, just load the widget
+      loadVoiceflowWidget();
+    }
+
+    function loadVoiceflowWidget() {
+      if (window.voiceflow && voiceflowDiv) {
+        try {
+          // Determine which project ID to use based on language
+          const projectID = currentLanguage === 'pt' 
+            ? '684b0132b587d28b5753321d'  // Portuguese chatbot
+            : '6846c5cea6a8e2a7db8c1327'; // English chatbot (default)
+
+          console.log(`Loading Voiceflow chatbot for language: ${currentLanguage}, Project ID: ${projectID}`);
+
+          voiceflowWidget.current = window.voiceflow.chat.load({
+            verify: { projectID },
+            url: 'https://general-runtime.voiceflow.com',
+            versionID: 'production',
+            voice: {
+              url: "https://runtime-api.voiceflow.com"
+            },
+            render: {
+              mode: 'embedded',
+              target: voiceflowDiv
+            }
+          });
+        } catch (error) {
+          console.error('Error loading Voiceflow widget:', error);
+        }
       }
-    };
-    script.src = "https://cdn.voiceflow.com/widget-next/bundle.mjs";
-    
-    document.head.appendChild(script);
+    }
 
     return () => {
-      // Cleanup script and container on unmount
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
+      // Cleanup container on unmount or language change
       if (voiceflowContainer.current && document.body.contains(voiceflowContainer.current)) {
         document.body.removeChild(voiceflowContainer.current);
       }
     };
-  }, []);
+  }, [currentLanguage, showLanguagePopup]); // Re-run when language changes or popup closes
 
   // Control Voiceflow chat visibility
   useEffect(() => {
@@ -309,7 +330,13 @@ export default function HomePage() {
   };
 
   const handleChatClick = () => {
-    setIsChatbotOpen(true);
+    // For English, use the enhanced chatbot
+    if (currentLanguage === 'en') {
+      setIsChatbotOpen(true);
+    } else {
+      // For Portuguese and other languages, use Voiceflow
+      setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
+    }
   };
 
   const handleVoiceflowChatClick = () => {
@@ -514,7 +541,7 @@ export default function HomePage() {
           </button>
           <Button 
             id="chat-button"
-            onClick={handleVoiceflowChatClick}
+            onClick={handleChatClick}
             variant="outline"
             size="sm"
             className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300 p-2"
@@ -566,7 +593,7 @@ export default function HomePage() {
                 {t('nav.contact')}
               </button>
               <Button 
-                onClick={handleVoiceflowChatClick}
+                onClick={handleChatClick}
                 variant="outline"
                 size="sm"
                 className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300 w-fit"
@@ -1143,11 +1170,13 @@ export default function HomePage() {
         </div>
       </footer>
 
-      {/* Enhanced Chatbot Component */}
-      <EnhancedChatbot 
-        isOpen={isChatbotOpen} 
-        onClose={() => setIsChatbotOpen(false)} 
-      />
+      {/* Enhanced Chatbot Component - Only for English */}
+      {currentLanguage === 'en' && (
+        <EnhancedChatbot 
+          isOpen={isChatbotOpen} 
+          onClose={() => setIsChatbotOpen(false)} 
+        />
+      )}
     </div>
   );
 }
