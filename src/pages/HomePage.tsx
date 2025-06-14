@@ -330,13 +330,8 @@ export default function HomePage() {
   };
 
   const handleChatClick = () => {
-    // For English, use the enhanced chatbot
-    if (currentLanguage === 'en') {
-      setIsChatbotOpen(true);
-    } else {
-      // For Portuguese and other languages, use Voiceflow
-      setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
-    }
+    // Always use Voiceflow chatbots for both languages
+    setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
   };
 
   const handleVoiceflowChatClick = () => {
@@ -1169,14 +1164,6 @@ export default function HomePage() {
           </div>
         </div>
       </footer>
-
-      {/* Enhanced Chatbot Component - Only for English */}
-      {currentLanguage === 'en' && (
-        <EnhancedChatbot 
-          isOpen={isChatbotOpen} 
-          onClose={() => setIsChatbotOpen(false)} 
-        />
-      )}
     </div>
   );
 }
