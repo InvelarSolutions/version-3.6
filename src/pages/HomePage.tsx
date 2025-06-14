@@ -225,18 +225,32 @@ export default function HomePage() {
       if (window.voiceflow && voiceflowDiv) {
         try {
           // Determine which project ID to use based on language
-          const projectID = currentLanguage === 'pt' 
-            ? '684b0132b587d28b5753321d'  // Portuguese chatbot
-            : '6846c5cea6a8e2a7db8c1327'; // English chatbot (default)
+          let projectID;
+          let voiceUrl = "https://runtime-api.voiceflow.com";
+          let generalUrl = 'https://general-runtime.voiceflow.com';
+          
+          switch (currentLanguage) {
+            case 'pt':
+              projectID = '684b0132b587d28b5753321d'; // Portuguese chatbot
+              break;
+            case 'fr':
+              projectID = '684d80d82d4ddb7e92582ee4'; // French chatbot
+              voiceUrl = "https://runtime-api.voiceflow.com/"; // French uses trailing slash
+              generalUrl = 'https://general-runtime.voiceflow.com/'; // French uses trailing slash
+              break;
+            default:
+              projectID = '6846c5cea6a8e2a7db8c1327'; // English chatbot (default)
+              break;
+          }
 
           console.log(`Loading Voiceflow chatbot for language: ${currentLanguage}, Project ID: ${projectID}`);
 
           voiceflowWidget.current = window.voiceflow.chat.load({
             verify: { projectID },
-            url: 'https://general-runtime.voiceflow.com',
+            url: generalUrl,
             versionID: 'production',
             voice: {
-              url: "https://runtime-api.voiceflow.com"
+              url: voiceUrl
             },
             render: {
               mode: 'embedded',
@@ -330,7 +344,7 @@ export default function HomePage() {
   };
 
   const handleChatClick = () => {
-    // Always use Voiceflow chatbots for both languages
+    // Always use Voiceflow chatbots for all languages
     setIsVoiceflowChatOpen(!isVoiceflowChatOpen);
   };
 
