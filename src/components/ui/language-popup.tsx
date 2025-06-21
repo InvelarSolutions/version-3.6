@@ -121,19 +121,18 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-      {/* Backdrop with blur effect */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-md"
-        style={{
-          background: 'radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)'
-        }}
-      />
-      
+    <div 
+      className="fixed inset-0 flex items-center justify-center p-4"
+      style={{ 
+        zIndex: 99999,
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        backdropFilter: 'blur(8px)'
+      }}
+    >
       {/* Popup Container - Centered in viewport */}
       <div 
         ref={modalRef}
-        className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500"
+        className="relative w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-500"
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
@@ -212,14 +211,6 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
             </p>
           </div>
         </Card>
-      </div>
-
-      {/* Decorative Elements - Positioned for centered layout */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating orbs for visual appeal - repositioned for centered layout */}
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
     </div>
   );
