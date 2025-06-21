@@ -858,7 +858,8 @@ export default function HomePage() {
                     t('services.chatbot.feature3'),
                     t('services.chatbot.feature4')
                   ],
-                  color: "text-green-400"
+                  color: "text-green-400",
+                  link: "/services/chatbot"
                 },
                 {
                   icon: Globe,
@@ -870,7 +871,8 @@ export default function HomePage() {
                     t('services.website.feature3'),
                     t('services.website.feature4')
                   ],
-                  color: "text-cyan-400"
+                  color: "text-cyan-400",
+                  link: "/services/website"
                 },
                 {
                   icon: Send,
@@ -882,7 +884,8 @@ export default function HomePage() {
                     t('services.email.feature3'),
                     t('services.email.feature4')
                   ],
-                  color: "text-orange-400"
+                  color: "text-orange-400",
+                  link: "/services/email"
                 },
                 {
                   icon: PhoneCall,
@@ -894,32 +897,40 @@ export default function HomePage() {
                     t('services.calling.feature3'),
                     t('services.calling.feature4')
                   ],
-                  color: "text-pink-400"
+                  color: "text-pink-400",
+                  link: "/services/calling"
                 }
               ].map((service, index) => (
-                <Card key={index} className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105 hover:shadow-xl">
-                  <CardContent className="p-8">
-                    <div className="mb-6">
-                      <service.icon className={`h-12 w-12 ${service.color} group-hover:scale-110 transition-transform duration-300`} />
-                    </div>
-                    <h3 className={`text-xl font-bold mb-4 ${service.color}`}>{service.title}</h3>
-                    <p className="text-gray-400 leading-relaxed mb-6">
-                      {service.description}
-                    </p>
-                    <div className="space-y-2">
-                      {service.features.map((feature, featureIndex) => (
-                        <div key={featureIndex} className="flex items-center text-sm text-gray-300">
-                          <div className="w-1.5 h-1.5 bg-white rounded-full mr-3 flex-shrink-0"></div>
-                          {feature}
-                        </div>
-                      ))}
-                    </div>
-                  </CardContent>
-                </Card>
+                <Link key={index} to={service.link} target="_blank" rel="noopener noreferrer">
+                  <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105 hover:shadow-xl cursor-pointer h-full">
+                    <CardContent className="p-8 h-full flex flex-col">
+                      <div className="mb-6">
+                        <service.icon className={`h-12 w-12 ${service.color} group-hover:scale-110 transition-transform duration-300`} />
+                      </div>
+                      <h3 className={`text-xl font-bold mb-4 ${service.color}`}>{service.title}</h3>
+                      <p className="text-gray-400 leading-relaxed mb-6 flex-grow">
+                        {service.description}
+                      </p>
+                      <div className="space-y-2 mb-4">
+                        {service.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center text-sm text-gray-300">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full mr-3 flex-shrink-0"></div>
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-auto pt-4 border-t border-gray-600">
+                        <p className="text-xs text-gray-500 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                          Click here for more information
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Link>
               ))}
             </div>
 
-            {/* Custom Integrations Section */}
+            {/* Custom Integrations Section - Non-clickable */}
             <div className="bg-[#2a2a2a] rounded-2xl p-8 md:p-12 border border-gray-700">
               <div className="text-center mb-8">
                 <Settings className="h-16 w-16 mx-auto text-white mb-4" />
