@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { NavigationLink } from '@/components/ui/navigation-link';
 import { 
   Settings, 
   ArrowRight, 
@@ -26,7 +27,6 @@ import {
   BarChart3,
   Copy
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { EnhancedChatbot } from '@/components/ui/enhanced-chatbot';
 import { LanguagePopup } from '@/components/ui/language-popup';
 import { useLanguageContext } from '@/contexts/LanguageContext';
@@ -556,11 +556,11 @@ export default function HomePage() {
           >
             <MessageCircle className="h-4 w-4 text-black" />
           </Button>
-          <Link to="/contact">
+          <NavigationLink to="/contact">
             <Button className="bg-white text-black hover:bg-gray-100 font-semibold transition-all duration-300 transform hover:scale-105">
               {t('nav.getStarted')}
             </Button>
-          </Link>
+          </NavigationLink>
         </nav>
 
         {/* Mobile Menu Button */}
@@ -608,11 +608,11 @@ export default function HomePage() {
                 <MessageCircle className="h-4 w-4 mr-2 text-black" />
                 {t('nav.aiChat')}
               </Button>
-              <Link to="/contact">
+              <NavigationLink to="/contact">
                 <Button className="bg-white text-black hover:bg-gray-100 font-semibold w-fit transition-all duration-300 transform hover:scale-105">
                   {t('nav.getStarted')}
                 </Button>
-              </Link>
+              </NavigationLink>
             </nav>
           </div>
         )}
@@ -635,7 +635,7 @@ export default function HomePage() {
           <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
             {t('hero.tagline')}
           </p>
-          <Link to="/contact">
+          <NavigationLink to="/contact">
             <Button 
               size="lg" 
               className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -643,7 +643,7 @@ export default function HomePage() {
               {t('hero.getStarted')}
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
-          </Link>
+          </NavigationLink>
         </div>
       </section>
 
@@ -901,7 +901,7 @@ export default function HomePage() {
                   link: "/services/calling"
                 }
               ].map((service, index) => (
-                <Link key={index} to={service.link} target="_blank" rel="noopener noreferrer">
+                <NavigationLink key={index} to={service.link}>
                   <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105 hover:shadow-xl cursor-pointer h-full">
                     <CardContent className="p-8 h-full flex flex-col">
                       <div className="mb-6">
@@ -926,7 +926,7 @@ export default function HomePage() {
                       </div>
                     </CardContent>
                   </Card>
-                </Link>
+                </NavigationLink>
               ))}
             </div>
 
@@ -1023,7 +1023,7 @@ export default function HomePage() {
               {t('cta.subtitle')}
             </p>
             
-            <Link to="/contact">
+            <NavigationLink to="/contact">
               <Button 
                 size="lg" 
                 className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
@@ -1031,7 +1031,7 @@ export default function HomePage() {
                 {t('cta.button')}
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
-            </Link>
+            </NavigationLink>
           </div>
         </div>
       </section>

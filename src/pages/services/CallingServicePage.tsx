@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { NavigationLink } from '@/components/ui/navigation-link';
 import { ArrowLeft, PhoneCall, CheckCircle, Users, Clock, TrendingUp, Mic, Calendar, Target, BarChart3 } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useLanguageContext } from '@/contexts/LanguageContext';
 
 export default function CallingServicePage() {
@@ -14,18 +14,18 @@ export default function CallingServicePage() {
 
       {/* Fixed Logo */}
       <div className="logo">
-        <Link to="/" className="flex items-center">
+        <NavigationLink to="/" className="flex items-center">
           <img
             src="/Invelar Logo.png"
             alt={t('alt.logo')}
             className="h-16 w-auto"
           />
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Fixed Navigation Button */}
       <div className="nav-buttons">
-        <Link to="/">
+        <NavigationLink to="/">
           <Button 
             variant="outline" 
             className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300"
@@ -33,7 +33,7 @@ export default function CallingServicePage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Button>
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Main Content */}
@@ -269,14 +269,14 @@ export default function CallingServicePage() {
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Transform your outreach with AI calling systems that work around the clock to qualify leads and grow your business.
             </p>
-            <Link to="/contact">
+            <NavigationLink to="/contact">
               <Button 
                 size="lg" 
                 className="bg-pink-400 text-black hover:bg-pink-300 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 Deploy Your AI Callers
               </Button>
-            </Link>
+            </NavigationLink>
           </div>
         </div>
       </main>

@@ -7,8 +7,8 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { PhoneInput } from '@/components/ui/phone-input';
+import { NavigationLink } from '@/components/ui/navigation-link';
 import { ArrowLeft, Send, CheckCircle, AlertCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { contactService } from '@/lib/supabase';
 import { useLanguageContext } from '@/contexts/LanguageContext';
 import { LanguagePopup } from '@/components/ui/language-popup';
@@ -225,7 +225,7 @@ export default function ContactPage() {
             >
               {t('contact.success.submitAnother')}
             </button>
-            <Link to="/">
+            <NavigationLink to="/">
               <Button 
                 variant="outline" 
                 className="w-full border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300"
@@ -233,7 +233,7 @@ export default function ContactPage() {
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 {t('contact.success.backHome')}
               </Button>
-            </Link>
+            </NavigationLink>
           </div>
         </div>
       </div>
@@ -253,18 +253,18 @@ export default function ContactPage() {
 
       {/* Fixed Logo */}
       <div className="logo">
-        <Link to="/" className="flex items-center">
+        <NavigationLink to="/" className="flex items-center">
           <img
             src="/Invelar Logo.png"
             alt={t('alt.logo')}
             className="h-16 w-auto"
           />
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Fixed Navigation Button */}
       <div className="nav-buttons">
-        <Link to="/">
+        <NavigationLink to="/">
           <Button 
             variant="outline" 
             className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300"
@@ -272,7 +272,7 @@ export default function ContactPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             {t('contact.success.backHome')}
           </Button>
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Main Content - Adjusted padding to account for fixed header */}

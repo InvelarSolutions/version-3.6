@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { NavigationLink } from '@/components/ui/navigation-link';
 import { ArrowLeft, Globe, CheckCircle, Smartphone, Search, BarChart3, Zap, Shield, Users, TrendingUp } from 'lucide-react';
-import { Link } from 'react-router-dom';
 import { useLanguageContext } from '@/contexts/LanguageContext';
 
 export default function WebsiteServicePage() {
@@ -14,18 +14,18 @@ export default function WebsiteServicePage() {
 
       {/* Fixed Logo */}
       <div className="logo">
-        <Link to="/" className="flex items-center">
+        <NavigationLink to="/" className="flex items-center">
           <img
             src="/Invelar Logo.png"
             alt={t('alt.logo')}
             className="h-16 w-auto"
           />
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Fixed Navigation Button */}
       <div className="nav-buttons">
-        <Link to="/">
+        <NavigationLink to="/">
           <Button 
             variant="outline" 
             className="border-gray-600 text-black hover:bg-gray-800 hover:text-white transition-all duration-300"
@@ -33,7 +33,7 @@ export default function WebsiteServicePage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Home
           </Button>
-        </Link>
+        </NavigationLink>
       </div>
 
       {/* Main Content */}
@@ -244,14 +244,14 @@ export default function WebsiteServicePage() {
             <p className="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
               Transform your online presence with a website that not only looks amazing but drives real business results.
             </p>
-            <Link to="/contact">
+            <NavigationLink to="/contact">
               <Button 
                 size="lg" 
                 className="bg-cyan-400 text-black hover:bg-cyan-300 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105"
               >
                 Start Your Project
               </Button>
-            </Link>
+            </NavigationLink>
           </div>
         </div>
       </main>
