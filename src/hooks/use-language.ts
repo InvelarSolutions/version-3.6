@@ -11,7 +11,7 @@ interface LanguageHook {
 
 export function useLanguage(): LanguageHook {
   const [currentLanguage, setCurrentLanguage] = useState<SupportedLanguage>('en');
-  const [showLanguagePopup, setShowLanguagePopup] = useState(false); // Changed to false - no popup by default
+  const [showLanguagePopup, setShowLanguagePopup] = useState(true); // Always show on load
 
   useEffect(() => {
     // Get saved language from localStorage if it exists

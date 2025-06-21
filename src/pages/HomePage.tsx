@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { NavigationLink } from '@/components/ui/navigation-link';
-import { LanguageSelector } from '@/components/ui/language-selector';
 import { 
   Settings, 
   ArrowRight, 
@@ -393,16 +392,14 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white">
-      {/* Language Selection Popup - Only show if showLanguagePopup is true */}
-      {showLanguagePopup && (
-        <LanguagePopup 
-          isOpen={showLanguagePopup} 
-          onLanguageSelect={handleLanguageSelect}
-        />
-      )}
+      {/* Language Selection Popup */}
+      <LanguagePopup 
+        isOpen={showLanguagePopup} 
+        onLanguageSelect={handleLanguageSelect}
+      />
 
-      {/* Ring Pattern Container - Ensure rings are always visible */}
-      <div className="ring-pattern-container">
+      {/* Global Ring Pattern - Behind everything but over backgrounds */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-[1]">
         {/* Calculate maximum ring size needed to fill screen */}
         {Array.from({ length: 30 }, (_, i) => {
           const size = 120 + (i * 100); // Start at 120px, increase by 100px each ring
@@ -446,7 +443,7 @@ export default function HomePage() {
           return (
             <div
               key={i}
-              className="ring-element absolute rounded-full border border-gray-600"
+              className="absolute rounded-full border border-gray-600"
               style={{
                 width: `${size}px`,
                 height: `${size}px`,
@@ -495,7 +492,7 @@ export default function HomePage() {
           return (
             <div
               key={`ultra-${i}`}
-              className="ring-element absolute rounded-full border border-gray-600"
+              className="absolute rounded-full border border-gray-600"
               style={{
                 width: `${size}px`,
                 height: `${size}px`,
@@ -519,11 +516,6 @@ export default function HomePage() {
           alt={t('alt.logo')}
           className="h-16 w-auto"
         />
-      </div>
-
-      {/* Language Selector - Positioned in header */}
-      <div className="language-selector">
-        <LanguageSelector />
       </div>
 
       {/* Fixed Navigation Buttons */}
@@ -626,554 +618,551 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Page Content Container */}
-      <div className="page-content">
-        {/* Hero Section - Adjusted padding to account for fixed header */}
-        <section className="relative px-4 pt-32 pb-32 overflow-hidden min-h-screen">
-          {/* Background Gradient - Behind rings */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-0" />
+      {/* Hero Section - Adjusted padding to account for fixed header */}
+      <section className="relative px-4 pt-32 pb-32 overflow-hidden min-h-screen">
+        {/* Background Gradient - Behind rings */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-0" />
 
-          {/* Content - In front of rings - MOVED EVEN HIGHER */}
-          <div className="relative max-w-6xl mx-auto text-center z-20 flex flex-col justify-center min-h-[calc(100vh-20rem)]">
-            <div className="mb-6">
-              <img
-                src="/Invelar Logo.png"
-                alt={t('alt.logo')}
-                className="mx-auto h-32 md:h-48 w-auto"
-              />
-            </div>
-            <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
-              {t('hero.tagline')}
-            </p>
-            <NavigationLink to="/contact">
-              <Button 
-                size="lg" 
-                className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-              >
-                {t('hero.getStarted')}
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </NavigationLink>
+        {/* Content - In front of rings - MOVED EVEN HIGHER */}
+        <div className="relative max-w-6xl mx-auto text-center z-20 flex flex-col justify-center min-h-[calc(100vh-20rem)]">
+          <div className="mb-6">
+            <img
+              src="/Invelar Logo.png"
+              alt={t('alt.logo')}
+              className="mx-auto h-32 md:h-48 w-auto"
+            />
           </div>
-        </section>
-
-        {/* About Invelar - WITH FADE ANIMATIONS */}
-        <section id="about" className="py-32 px-4 bg-[#151515] relative z-20">
-          <div className="max-w-7xl mx-auto">
-            <div 
-              ref={aboutRef}
-              className={`transition-all duration-1000 ease-out ${
-                aboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-              }`}
+          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
+            {t('hero.tagline')}
+          </p>
+          <NavigationLink to="/contact">
+            <Button 
+              size="lg" 
+              className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
             >
-              {/* Main About Header */}
-              <div className="text-center mb-20">
-                <h2 className="text-4xl md:text-5xl font-bold mb-8">{t('about.title')}</h2>
-              </div>
+              {t('hero.getStarted')}
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </NavigationLink>
+        </div>
+      </section>
 
-              {/* Mission & Vision Grid */}
-              <div className="grid lg:grid-cols-2 gap-12 mb-20">
-                <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group">
-                  <CardContent className="p-10">
-                    <div className="flex items-center mb-6">
-                      <Target className="h-12 w-12 text-blue-400 mr-4" />
-                      <h3 className="text-2xl font-bold text-blue-400">{t('about.mission.title')}</h3>
-                    </div>
-                    <p className="text-gray-300 leading-relaxed text-lg">
-                      {t('about.mission.description')}
-                    </p>
-                  </CardContent>
-                </Card>
+      {/* About Invelar - WITH FADE ANIMATIONS */}
+      <section id="about" className="py-32 px-4 bg-[#151515] relative z-20">
+        <div className="max-w-7xl mx-auto">
+          <div 
+            ref={aboutRef}
+            className={`transition-all duration-1000 ease-out ${
+              aboutVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+            }`}
+          >
+            {/* Main About Header */}
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-8">{t('about.title')}</h2>
+            </div>
 
-                <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group">
-                  <CardContent className="p-10">
-                    <div className="flex items-center mb-6">
-                      <Lightbulb className="h-12 w-12 text-yellow-400 mr-4" />
-                      <h3 className="text-2xl font-bold text-yellow-400">{t('about.vision.title')}</h3>
-                    </div>
-                    <p className="text-gray-300 leading-relaxed text-lg">
-                      {t('about.vision.description')}
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* What Sets Us Apart */}
-              <div className="mb-20">
-                <h3 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('about.whatSetsUsApart.title')}</h3>
-                
-                <div className="grid md:grid-cols-3 gap-8">
-                  {[
-                    {
-                      icon: Zap,
-                      title: t('about.whatSetsUsApart.feature1.title'),
-                      description: t('about.whatSetsUsApart.feature1.description'),
-                      color: "text-yellow-400"
-                    },
-                    {
-                      icon: Shield,
-                      title: t('about.whatSetsUsApart.feature2.title'),
-                      description: t('about.whatSetsUsApart.feature2.description'),
-                      color: "text-green-400"
-                    },
-                    {
-                      icon: BarChart3,
-                      title: t('about.whatSetsUsApart.feature3.title'),
-                      description: t('about.whatSetsUsApart.feature3.description'),
-                      color: "text-blue-400"
-                    }
-                  ].map((feature, index) => (
-                    <Card key={index} className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105">
-                      <CardContent className="p-8 text-center">
-                        <feature.icon className={`h-16 w-16 ${feature.color} mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`} />
-                        <h4 className={`text-xl font-bold mb-4 ${feature.color}`}>{feature.title}</h4>
-                        <p className="text-gray-300 leading-relaxed">{feature.description}</p>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </div>
-
-              {/* Why Choose Invelar */}
-              <div className="text-center">
-                <h3 className="text-3xl md:text-4xl font-bold mb-12">{t('about.whyChoose.title')}</h3>
-                
-                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
-                  {[
-                    {
-                      icon: Award,
-                      title: t('about.whyChoose.feature1.title'),
-                      description: t('about.whyChoose.feature1.description'),
-                      color: "text-yellow-400"
-                    },
-                    {
-                      icon: Users,
-                      title: t('about.whyChoose.feature2.title'),
-                      description: t('about.whyChoose.feature2.description'),
-                      color: "text-blue-400"
-                    },
-                    {
-                      icon: Zap,
-                      title: t('about.whyChoose.feature3.title'),
-                      description: t('about.whyChoose.feature3.description'),
-                      color: "text-yellow-400"
-                    },
-                    {
-                      icon: Shield,
-                      title: t('about.whyChoose.feature4.title'),
-                      description: t('about.whyChoose.feature4.description'),
-                      color: "text-green-400"
-                    }
-                  ].map((reason, index) => (
-                    <div key={index} className="text-center">
-                      <div className="bg-[#2a2a2a] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:shadow-lg hover:scale-110">
-                        <reason.icon className={`h-10 w-10 ${reason.color}`} />
-                      </div>
-                      <h4 className={`font-bold mb-2 ${reason.color}`}>{reason.title}</h4>
-                      <p className="text-gray-400 text-sm">{reason.description}</p>
-                    </div>
-                  ))}
-                </div>
-
-                <div className="max-w-4xl mx-auto">
-                  <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
-                    {t('about.whyChoose.description')}
+            {/* Mission & Vision Grid */}
+            <div className="grid lg:grid-cols-2 gap-12 mb-20">
+              <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group">
+                <CardContent className="p-10">
+                  <div className="flex items-center mb-6">
+                    <Target className="h-12 w-12 text-blue-400 mr-4" />
+                    <h3 className="text-2xl font-bold text-blue-400">{t('about.mission.title')}</h3>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed text-lg">
+                    {t('about.mission.description')}
                   </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+                </CardContent>
+              </Card>
 
-        {/* The Power of Automation - WITH DARKER BACKGROUND AND FADE ANIMATIONS */}
-        <section className="py-20 px-4 relative">
-          {/* Darker background that covers rings */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a] z-10" />
-          
-          <div className="max-w-6xl mx-auto relative z-20">
-            <div 
-              ref={powerRef}
-              className="transition-all duration-1000 ease-out"
-              style={{ 
-                opacity: powerVisible ? powerScrollFade : 0,
-                transform: `translateY(${powerVisible ? 0 : 48}px) scale(${0.95 + (powerScrollFade * 0.05)})`
-              }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('power.title')}</h2>
+              <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group">
+                <CardContent className="p-10">
+                  <div className="flex items-center mb-6">
+                    <Lightbulb className="h-12 w-12 text-yellow-400 mr-4" />
+                    <h3 className="text-2xl font-bold text-yellow-400">{t('about.vision.title')}</h3>
+                  </div>
+                  <p className="text-gray-300 leading-relaxed text-lg">
+                    {t('about.vision.description')}
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+
+            {/* What Sets Us Apart */}
+            <div className="mb-20">
+              <h3 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('about.whatSetsUsApart.title')}</h3>
               
-              <div className="grid md:grid-cols-3 gap-8 mb-12">
+              <div className="grid md:grid-cols-3 gap-8">
                 {[
                   {
-                    icon: DollarSign,
-                    value: t('power.stat1.value'),
-                    label: t('power.stat1.label'),
+                    icon: Zap,
+                    title: t('about.whatSetsUsApart.feature1.title'),
+                    description: t('about.whatSetsUsApart.feature1.description'),
+                    color: "text-yellow-400"
+                  },
+                  {
+                    icon: Shield,
+                    title: t('about.whatSetsUsApart.feature2.title'),
+                    description: t('about.whatSetsUsApart.feature2.description'),
                     color: "text-green-400"
                   },
                   {
-                    icon: Clock,
-                    value: t('power.stat2.value'),
-                    label: t('power.stat2.label'),
+                    icon: BarChart3,
+                    title: t('about.whatSetsUsApart.feature3.title'),
+                    description: t('about.whatSetsUsApart.feature3.description'),
                     color: "text-blue-400"
-                  },
-                  {
-                    icon: TrendingUp,
-                    value: t('power.stat3.value'),
-                    label: t('power.stat3.label'),
-                    color: "text-purple-400"
                   }
-                ].map((stat, index) => (
-                  <div key={index} className="text-center transition-all duration-700 ease-out transform hover:scale-105">
-                    <div className="bg-[#2a2a2a] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:shadow-lg">
-                      <stat.icon className={`h-10 w-10 ${stat.color}`} />
-                    </div>
-                    <h3 className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.value}</h3>
-                    <p className="text-gray-400">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-
-              <div className="max-w-4xl mx-auto text-center">
-                <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
-                  {t('power.description')}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Our Services - WITH FADE ANIMATIONS */}
-        <section id="services" className="py-20 px-4 bg-[#151515] relative z-20">
-          <div className="max-w-7xl mx-auto">
-            <div 
-              ref={servicesRef}
-              className={`transition-all duration-1000 ease-out ${
-                servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-              }`}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">{t('services.title')}</h2>
-              <p className="text-lg text-gray-400 text-center mb-16 max-w-3xl mx-auto">
-                {t('services.subtitle')}
-              </p>
-              
-              {/* Core Services Grid - Removed Workflow Automation and AI Agents */}
-              <div className="grid lg:grid-cols-2 md:grid-cols-2 gap-8 mb-16">
-                {[
-                  {
-                    icon: MessageCircle,
-                    title: t('services.chatbot.title'),
-                    description: t('services.chatbot.description'),
-                    features: [
-                      t('services.chatbot.feature1'),
-                      t('services.chatbot.feature2'),
-                      t('services.chatbot.feature3'),
-                      t('services.chatbot.feature4')
-                    ],
-                    color: "text-green-400",
-                    link: "/services/chatbot"
-                  },
-                  {
-                    icon: Globe,
-                    title: t('services.website.title'),
-                    description: t('services.website.description'),
-                    features: [
-                      t('services.website.feature1'),
-                      t('services.website.feature2'),
-                      t('services.website.feature3'),
-                      t('services.website.feature4')
-                    ],
-                    color: "text-cyan-400",
-                    link: "/services/website"
-                  },
-                  {
-                    icon: Send,
-                    title: t('services.email.title'),
-                    description: t('services.email.description'),
-                    features: [
-                      t('services.email.feature1'),
-                      t('services.email.feature2'),
-                      t('services.email.feature3'),
-                      t('services.email.feature4')
-                    ],
-                    color: "text-orange-400",
-                    link: "/services/email"
-                  },
-                  {
-                    icon: PhoneCall,
-                    title: t('services.calling.title'),
-                    description: t('services.calling.description'),
-                    features: [
-                      t('services.calling.feature1'),
-                      t('services.calling.feature2'),
-                      t('services.calling.feature3'),
-                      t('services.calling.feature4')
-                    ],
-                    color: "text-pink-400",
-                    link: "/services/calling"
-                  }
-                ].map((service, index) => (
-                  <NavigationLink key={index} to={service.link}>
-                    <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105 hover:shadow-xl cursor-pointer h-full">
-                      <CardContent className="p-8 h-full flex flex-col">
-                        <div className="mb-6">
-                          <service.icon className={`h-12 w-12 ${service.color} group-hover:scale-110 transition-transform duration-300`} />
-                        </div>
-                        <h3 className={`text-xl font-bold mb-4 ${service.color}`}>{service.title}</h3>
-                        <p className="text-gray-400 leading-relaxed mb-6 flex-grow">
-                          {service.description}
-                        </p>
-                        <div className="space-y-2 mb-4">
-                          {service.features.map((feature, featureIndex) => (
-                            <div key={featureIndex} className="flex items-center text-sm text-gray-300">
-                              <div className="w-1.5 h-1.5 bg-white rounded-full mr-3 flex-shrink-0"></div>
-                              {feature}
-                            </div>
-                          ))}
-                        </div>
-                        <div className="mt-auto pt-4 border-t border-gray-600">
-                          <p className="text-xs text-gray-500 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
-                            Click here for more information
-                          </p>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </NavigationLink>
-                ))}
-              </div>
-
-              {/* Custom Integrations Section - Non-clickable */}
-              <div className="bg-[#2a2a2a] rounded-2xl p-8 md:p-12 border border-gray-700">
-                <div className="text-center mb-8">
-                  <Settings className="h-16 w-16 mx-auto text-white mb-4" />
-                  <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('services.custom.title')}</h3>
-                  <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                    {t('services.custom.description')}
-                  </p>
-                </div>
-                
-                <div className="grid md:grid-cols-3 gap-8">
-                  <div className="text-center">
-                    <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature1.title')}</h4>
-                    <p className="text-gray-400 text-sm">{t('services.custom.feature1.description')}</p>
-                  </div>
-                  <div className="text-center">
-                    <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature2.title')}</h4>
-                    <p className="text-gray-400 text-sm">{t('services.custom.feature2.description')}</p>
-                  </div>
-                  <div className="text-center">
-                    <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature3.title')}</h4>
-                    <p className="text-gray-400 text-sm">{t('services.custom.feature3.description')}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials - WITH BACKGROUND AND FADE ANIMATIONS */}
-        <section id="testimonials" className="py-20 px-4 relative">
-          {/* Background that covers rings */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-10" />
-          
-          <div className="max-w-6xl mx-auto relative z-20">
-            <div 
-              ref={testimonialsRef}
-              className="transition-all duration-1000 ease-out"
-              style={{ 
-                opacity: testimonialsVisible ? testimonialsScrollFade : 0,
-                transform: `translateY(${testimonialsVisible ? 0 : 48}px) scale(${0.95 + (testimonialsScrollFade * 0.05)})`
-              }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('testimonials.title')}</h2>
-              
-              <div className="grid md:grid-cols-2 gap-8">
-                {[
-                  {
-                    text: t('testimonials.testimonial1'),
-                    author: t('testimonials.author1')
-                  },
-                  {
-                    text: t('testimonials.testimonial2'),
-                    author: t('testimonials.author2')
-                  }
-                ].map((testimonial, index) => (
-                  <Card key={index} className="bg-[#2a2a2a] border-gray-700 transition-all duration-700 ease-out transform hover:scale-105 hover:shadow-xl">
-                    <CardContent className="p-8">
-                      <div className="flex mb-4">
-                        {[...Array(5)].map((_, i) => (
-                          <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                        ))}
-                      </div>
-                      <p className="text-gray-300 mb-6 leading-relaxed">
-                        "{testimonial.text}"
-                      </p>
-                      <div className="border-t border-gray-600 pt-4">
-                        <p className="font-semibold text-white">{testimonial.author}</p>
-                      </div>
+                ].map((feature, index) => (
+                  <Card key={index} className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105">
+                    <CardContent className="p-8 text-center">
+                      <feature.icon className={`h-16 w-16 ${feature.color} mx-auto mb-6 group-hover:scale-110 transition-transform duration-300`} />
+                      <h4 className={`text-xl font-bold mb-4 ${feature.color}`}>{feature.title}</h4>
+                      <p className="text-gray-300 leading-relaxed">{feature.description}</p>
                     </CardContent>
                   </Card>
                 ))}
               </div>
             </div>
-          </div>
-        </section>
 
-        {/* Call to Action - WITH FADE ANIMATIONS */}
-        <section id="contact" className="py-20 px-4 bg-[#151515] relative z-20">
-          <div className="max-w-4xl mx-auto text-center">
-            <div 
-              ref={ctaRef}
-              className="transition-all duration-1000 ease-out"
-              style={{ 
-                opacity: ctaVisible ? ctaScrollFade : 0,
-                transform: `translateY(${ctaVisible ? 0 : 48}px) scale(${0.95 + (ctaScrollFade * 0.05)})`
-              }}
-            >
-              <h2 className="text-3xl md:text-4xl font-bold mb-8">{t('cta.title')}</h2>
-              <p className="text-xl text-gray-400 mb-12 leading-relaxed">
-                {t('cta.subtitle')}
-              </p>
+            {/* Why Choose Invelar */}
+            <div className="text-center">
+              <h3 className="text-3xl md:text-4xl font-bold mb-12">{t('about.whyChoose.title')}</h3>
               
-              <NavigationLink to="/contact">
-                <Button 
-                  size="lg" 
-                  className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
-                >
-                  {t('cta.button')}
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-              </NavigationLink>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+                {[
+                  {
+                    icon: Award,
+                    title: t('about.whyChoose.feature1.title'),
+                    description: t('about.whyChoose.feature1.description'),
+                    color: "text-yellow-400"
+                  },
+                  {
+                    icon: Users,
+                    title: t('about.whyChoose.feature2.title'),
+                    description: t('about.whyChoose.feature2.description'),
+                    color: "text-blue-400"
+                  },
+                  {
+                    icon: Zap,
+                    title: t('about.whyChoose.feature3.title'),
+                    description: t('about.whyChoose.feature3.description'),
+                    color: "text-yellow-400"
+                  },
+                  {
+                    icon: Shield,
+                    title: t('about.whyChoose.feature4.title'),
+                    description: t('about.whyChoose.feature4.description'),
+                    color: "text-green-400"
+                  }
+                ].map((reason, index) => (
+                  <div key={index} className="text-center">
+                    <div className="bg-[#2a2a2a] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:shadow-lg hover:scale-110">
+                      <reason.icon className={`h-10 w-10 ${reason.color}`} />
+                    </div>
+                    <h4 className={`font-bold mb-2 ${reason.color}`}>{reason.title}</h4>
+                    <p className="text-gray-400 text-sm">{reason.description}</p>
+                  </div>
+                ))}
+              </div>
+
+              <div className="max-w-4xl mx-auto">
+                <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                  {t('about.whyChoose.description')}
+                </p>
+              </div>
             </div>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Footer - WITH BACKGROUND */}
-        <footer className="py-12 px-4 border-t border-gray-800 relative">
-          {/* Background that covers rings */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-10" />
-          
-          <div className="max-w-6xl mx-auto relative z-20">
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="md:col-span-2">
-                <div className="mb-4">
-                  <img
-                    src="/Invelar Logo.png"
-                    alt={t('alt.logo')}
-                    className="h-16 w-auto"
-                  />
+      {/* The Power of Automation - WITH DARKER BACKGROUND AND FADE ANIMATIONS */}
+      <section className="py-20 px-4 relative">
+        {/* Darker background that covers rings */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f0f0f] to-[#0a0a0a] z-10" />
+        
+        <div className="max-w-6xl mx-auto relative z-20">
+          <div 
+            ref={powerRef}
+            className="transition-all duration-1000 ease-out"
+            style={{ 
+              opacity: powerVisible ? powerScrollFade : 0,
+              transform: `translateY(${powerVisible ? 0 : 48}px) scale(${0.95 + (powerScrollFade * 0.05)})`
+            }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('power.title')}</h2>
+            
+            <div className="grid md:grid-cols-3 gap-8 mb-12">
+              {[
+                {
+                  icon: DollarSign,
+                  value: t('power.stat1.value'),
+                  label: t('power.stat1.label'),
+                  color: "text-green-400"
+                },
+                {
+                  icon: Clock,
+                  value: t('power.stat2.value'),
+                  label: t('power.stat2.label'),
+                  color: "text-blue-400"
+                },
+                {
+                  icon: TrendingUp,
+                  value: t('power.stat3.value'),
+                  label: t('power.stat3.label'),
+                  color: "text-purple-400"
+                }
+              ].map((stat, index) => (
+                <div key={index} className="text-center transition-all duration-700 ease-out transform hover:scale-105">
+                  <div className="bg-[#2a2a2a] rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4 transition-all duration-300 hover:shadow-lg">
+                    <stat.icon className={`h-10 w-10 ${stat.color}`} />
+                  </div>
+                  <h3 className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.value}</h3>
+                  <p className="text-gray-400">{stat.label}</p>
                 </div>
-                <p className="text-gray-400 mb-4">
-                  {t('footer.tagline')}
+              ))}
+            </div>
+
+            <div className="max-w-4xl mx-auto text-center">
+              <p className="text-lg md:text-xl text-gray-300 leading-relaxed">
+                {t('power.description')}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Our Services - WITH FADE ANIMATIONS */}
+      <section id="services" className="py-20 px-4 bg-[#151515] relative z-20">
+        <div className="max-w-7xl mx-auto">
+          <div 
+            ref={servicesRef}
+            className={`transition-all duration-1000 ease-out ${
+              servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
+            }`}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-6">{t('services.title')}</h2>
+            <p className="text-lg text-gray-400 text-center mb-16 max-w-3xl mx-auto">
+              {t('services.subtitle')}
+            </p>
+            
+            {/* Core Services Grid - Removed Workflow Automation and AI Agents */}
+            <div className="grid lg:grid-cols-2 md:grid-cols-2 gap-8 mb-16">
+              {[
+                {
+                  icon: MessageCircle,
+                  title: t('services.chatbot.title'),
+                  description: t('services.chatbot.description'),
+                  features: [
+                    t('services.chatbot.feature1'),
+                    t('services.chatbot.feature2'),
+                    t('services.chatbot.feature3'),
+                    t('services.chatbot.feature4')
+                  ],
+                  color: "text-green-400",
+                  link: "/services/chatbot"
+                },
+                {
+                  icon: Globe,
+                  title: t('services.website.title'),
+                  description: t('services.website.description'),
+                  features: [
+                    t('services.website.feature1'),
+                    t('services.website.feature2'),
+                    t('services.website.feature3'),
+                    t('services.website.feature4')
+                  ],
+                  color: "text-cyan-400",
+                  link: "/services/website"
+                },
+                {
+                  icon: Send,
+                  title: t('services.email.title'),
+                  description: t('services.email.description'),
+                  features: [
+                    t('services.email.feature1'),
+                    t('services.email.feature2'),
+                    t('services.email.feature3'),
+                    t('services.email.feature4')
+                  ],
+                  color: "text-orange-400",
+                  link: "/services/email"
+                },
+                {
+                  icon: PhoneCall,
+                  title: t('services.calling.title'),
+                  description: t('services.calling.description'),
+                  features: [
+                    t('services.calling.feature1'),
+                    t('services.calling.feature2'),
+                    t('services.calling.feature3'),
+                    t('services.calling.feature4')
+                  ],
+                  color: "text-pink-400",
+                  link: "/services/calling"
+                }
+              ].map((service, index) => (
+                <NavigationLink key={index} to={service.link}>
+                  <Card className="bg-[#2a2a2a] border-gray-700 hover:border-gray-500 transition-all duration-500 group transform hover:scale-105 hover:shadow-xl cursor-pointer h-full">
+                    <CardContent className="p-8 h-full flex flex-col">
+                      <div className="mb-6">
+                        <service.icon className={`h-12 w-12 ${service.color} group-hover:scale-110 transition-transform duration-300`} />
+                      </div>
+                      <h3 className={`text-xl font-bold mb-4 ${service.color}`}>{service.title}</h3>
+                      <p className="text-gray-400 leading-relaxed mb-6 flex-grow">
+                        {service.description}
+                      </p>
+                      <div className="space-y-2 mb-4">
+                        {service.features.map((feature, featureIndex) => (
+                          <div key={featureIndex} className="flex items-center text-sm text-gray-300">
+                            <div className="w-1.5 h-1.5 bg-white rounded-full mr-3 flex-shrink-0"></div>
+                            {feature}
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-auto pt-4 border-t border-gray-600">
+                        <p className="text-xs text-gray-500 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                          Click here for more information
+                        </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </NavigationLink>
+              ))}
+            </div>
+
+            {/* Custom Integrations Section - Non-clickable */}
+            <div className="bg-[#2a2a2a] rounded-2xl p-8 md:p-12 border border-gray-700">
+              <div className="text-center mb-8">
+                <Settings className="h-16 w-16 mx-auto text-white mb-4" />
+                <h3 className="text-2xl md:text-3xl font-bold mb-4 text-white">{t('services.custom.title')}</h3>
+                <p className="text-lg text-gray-300 max-w-3xl mx-auto">
+                  {t('services.custom.description')}
                 </p>
-                <div className="flex space-x-4 relative">
-                  {/* Mail Button with Email Bubble */}
-                  <div className="relative">
-                    <button
-                      ref={mailButtonRef}
-                      onClick={handleMailClick}
-                      className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
-                    >
-                      <Mail className="h-5 w-5" />
-                    </button>
-                    
-                    {/* Email Bubble */}
-                    {showEmailBubble && (
-                      <div
-                        ref={emailBubbleRef}
-                        className="absolute bottom-8 left-0 bg-[#2a2a2a] border border-gray-600 rounded-lg p-4 shadow-lg z-50 min-w-[280px] animate-in fade-in-0 zoom-in-95 duration-200"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-white font-semibold text-sm">Contact Email</h4>
-                          <button
-                            onClick={handleCopyEmail}
-                            className="text-gray-400 hover:text-white transition-colors duration-200"
-                            title="Copy email"
-                          >
-                            <Copy className="h-4 w-4" />
-                          </button>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <p className="text-gray-300 text-sm font-mono">invelarsolutions@gmail.com</p>
-                        </div>
-                        {emailCopied && (
-                          <p className="text-green-400 text-xs mt-2 animate-in fade-in-0 duration-200">
-                            ✓ Email copied to clipboard
-                          </p>
-                        )}
-                        {/* Arrow pointing down to the mail icon */}
-                        <div className="absolute -bottom-1 left-2 w-2 h-2 bg-[#2a2a2a] border-r border-b border-gray-600 transform rotate-45"></div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Phone Button with Phone Bubble */}
-                  <div className="relative">
-                    <button
-                      ref={phoneButtonRef}
-                      onClick={handlePhoneClick}
-                      className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
-                    >
-                      <Phone className="h-5 w-5" />
-                    </button>
-                    
-                    {/* Phone Bubble */}
-                    {showPhoneBubble && (
-                      <div
-                        ref={phoneBubbleRef}
-                        className="absolute bottom-8 left-0 bg-[#2a2a2a] border border-gray-600 rounded-lg p-4 shadow-lg z-50 min-w-[280px] animate-in fade-in-0 zoom-in-95 duration-200"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="text-white font-semibold text-sm">Phone Number</h4>
-                          <button
-                            onClick={handleCopyPhone}
-                            className="text-gray-400 hover:text-white transition-colors duration-200"
-                            title="Copy phone number"
-                          >
-                            <Copy className="h-4 w-4" />
-                          </button>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <p className="text-gray-300 text-sm font-mono">+352 691 100 088</p>
-                        </div>
-                        {phoneCopied && (
-                          <p className="text-green-400 text-xs mt-2 animate-in fade-in-0 duration-200">
-                            ✓ Phone number copied to clipboard
-                          </p>
-                        )}
-                        {/* Arrow pointing down to the phone icon */}
-                        <div className="absolute -bottom-1 left-2 w-2 h-2 bg-[#2a2a2a] border-r border-b border-gray-600 transform rotate-45"></div>
-                      </div>
-                    )}
-                  </div>
-                  
-                  <MapPin className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer" />
+              </div>
+              
+              <div className="grid md:grid-cols-3 gap-8">
+                <div className="text-center">
+                  <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature1.title')}</h4>
+                  <p className="text-gray-400 text-sm">{t('services.custom.feature1.description')}</p>
+                </div>
+                <div className="text-center">
+                  <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature2.title')}</h4>
+                  <p className="text-gray-400 text-sm">{t('services.custom.feature2.description')}</p>
+                </div>
+                <div className="text-center">
+                  <h4 className="font-semibold mb-3 text-white">{t('services.custom.feature3.title')}</h4>
+                  <p className="text-gray-400 text-sm">{t('services.custom.feature3.description')}</p>
                 </div>
               </div>
-              
-              <div>
-                <h4 className="font-semibold mb-4">{t('footer.company')}</h4>
-                <ul className="space-y-2 text-gray-400">
-                  <li><button onClick={() => scrollToSection('about')} className="hover:text-white transition-colors duration-300">{t('nav.about')}</button></li>
-                  <li><button onClick={() => scrollToSection('services')} className="hover:text-white transition-colors duration-300">{t('nav.services')}</button></li>
-                  <li><button onClick={() => scrollToSection('contact')} className="hover:text-white transition-colors duration-300">{t('nav.contact')}</button></li>
-                </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials - WITH BACKGROUND AND FADE ANIMATIONS */}
+      <section id="testimonials" className="py-20 px-4 relative">
+        {/* Background that covers rings */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-10" />
+        
+        <div className="max-w-6xl mx-auto relative z-20">
+          <div 
+            ref={testimonialsRef}
+            className="transition-all duration-1000 ease-out"
+            style={{ 
+              opacity: testimonialsVisible ? testimonialsScrollFade : 0,
+              transform: `translateY(${testimonialsVisible ? 0 : 48}px) scale(${0.95 + (testimonialsScrollFade * 0.05)})`
+            }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-center mb-16">{t('testimonials.title')}</h2>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              {[
+                {
+                  text: t('testimonials.testimonial1'),
+                  author: t('testimonials.author1')
+                },
+                {
+                  text: t('testimonials.testimonial2'),
+                  author: t('testimonials.author2')
+                }
+              ].map((testimonial, index) => (
+                <Card key={index} className="bg-[#2a2a2a] border-gray-700 transition-all duration-700 ease-out transform hover:scale-105 hover:shadow-xl">
+                  <CardContent className="p-8">
+                    <div className="flex mb-4">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
+                      ))}
+                    </div>
+                    <p className="text-gray-300 mb-6 leading-relaxed">
+                      "{testimonial.text}"
+                    </p>
+                    <div className="border-t border-gray-600 pt-4">
+                      <p className="font-semibold text-white">{testimonial.author}</p>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Call to Action - WITH FADE ANIMATIONS */}
+      <section id="contact" className="py-20 px-4 bg-[#151515] relative z-20">
+        <div className="max-w-4xl mx-auto text-center">
+          <div 
+            ref={ctaRef}
+            className="transition-all duration-1000 ease-out"
+            style={{ 
+              opacity: ctaVisible ? ctaScrollFade : 0,
+              transform: `translateY(${ctaVisible ? 0 : 48}px) scale(${0.95 + (ctaScrollFade * 0.05)})`
+            }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-8">{t('cta.title')}</h2>
+            <p className="text-xl text-gray-400 mb-12 leading-relaxed">
+              {t('cta.subtitle')}
+            </p>
+            
+            <NavigationLink to="/contact">
+              <Button 
+                size="lg" 
+                className="bg-white text-black hover:bg-gray-100 text-lg px-8 py-6 rounded-full font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg"
+              >
+                {t('cta.button')}
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </NavigationLink>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - WITH BACKGROUND */}
+      <footer className="py-12 px-4 border-t border-gray-800 relative">
+        {/* Background that covers rings */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-10" />
+        
+        <div className="max-w-6xl mx-auto relative z-20">
+          <div className="grid md:grid-cols-4 gap-8">
+            <div className="md:col-span-2">
+              <div className="mb-4">
+                <img
+                  src="/Invelar Logo.png"
+                  alt={t('alt.logo')}
+                  className="h-16 w-auto"
+                />
               </div>
-              
-              <div>
-                <h4 className="font-semibold mb-4">{t('footer.legal')}</h4>
-                <ul className="space-y-2 text-gray-400">
-                  <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.privacyPolicy')}</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.termsOfService')}</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.cookiePolicy')}</a></li>
-                </ul>
+              <p className="text-gray-400 mb-4">
+                {t('footer.tagline')}
+              </p>
+              <div className="flex space-x-4 relative">
+                {/* Mail Button with Email Bubble */}
+                <div className="relative">
+                  <button
+                    ref={mailButtonRef}
+                    onClick={handleMailClick}
+                    className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
+                  >
+                    <Mail className="h-5 w-5" />
+                  </button>
+                  
+                  {/* Email Bubble */}
+                  {showEmailBubble && (
+                    <div
+                      ref={emailBubbleRef}
+                      className="absolute bottom-8 left-0 bg-[#2a2a2a] border border-gray-600 rounded-lg p-4 shadow-lg z-50 min-w-[280px] animate-in fade-in-0 zoom-in-95 duration-200"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-white font-semibold text-sm">Contact Email</h4>
+                        <button
+                          onClick={handleCopyEmail}
+                          className="text-gray-400 hover:text-white transition-colors duration-200"
+                          title="Copy email"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-gray-300 text-sm font-mono">invelarsolutions@gmail.com</p>
+                      </div>
+                      {emailCopied && (
+                        <p className="text-green-400 text-xs mt-2 animate-in fade-in-0 duration-200">
+                          ✓ Email copied to clipboard
+                        </p>
+                      )}
+                      {/* Arrow pointing down to the mail icon */}
+                      <div className="absolute -bottom-1 left-2 w-2 h-2 bg-[#2a2a2a] border-r border-b border-gray-600 transform rotate-45"></div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Phone Button with Phone Bubble */}
+                <div className="relative">
+                  <button
+                    ref={phoneButtonRef}
+                    onClick={handlePhoneClick}
+                    className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer"
+                  >
+                    <Phone className="h-5 w-5" />
+                  </button>
+                  
+                  {/* Phone Bubble */}
+                  {showPhoneBubble && (
+                    <div
+                      ref={phoneBubbleRef}
+                      className="absolute bottom-8 left-0 bg-[#2a2a2a] border border-gray-600 rounded-lg p-4 shadow-lg z-50 min-w-[280px] animate-in fade-in-0 zoom-in-95 duration-200"
+                    >
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="text-white font-semibold text-sm">Phone Number</h4>
+                        <button
+                          onClick={handleCopyPhone}
+                          className="text-gray-400 hover:text-white transition-colors duration-200"
+                          title="Copy phone number"
+                        >
+                          <Copy className="h-4 w-4" />
+                        </button>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <p className="text-gray-300 text-sm font-mono">+352 691 100 088</p>
+                      </div>
+                      {phoneCopied && (
+                        <p className="text-green-400 text-xs mt-2 animate-in fade-in-0 duration-200">
+                          ✓ Phone number copied to clipboard
+                        </p>
+                      )}
+                      {/* Arrow pointing down to the phone icon */}
+                      <div className="absolute -bottom-1 left-2 w-2 h-2 bg-[#2a2a2a] border-r border-b border-gray-600 transform rotate-45"></div>
+                    </div>
+                  )}
+                </div>
+                
+                <MapPin className="h-5 w-5 text-gray-400 hover:text-white transition-colors duration-300 cursor-pointer" />
               </div>
             </div>
             
-            <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-              <p>{t('footer.copyright')}</p>
+            <div>
+              <h4 className="font-semibold mb-4">{t('footer.company')}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><button onClick={() => scrollToSection('about')} className="hover:text-white transition-colors duration-300">{t('nav.about')}</button></li>
+                <li><button onClick={() => scrollToSection('services')} className="hover:text-white transition-colors duration-300">{t('nav.services')}</button></li>
+                <li><button onClick={() => scrollToSection('contact')} className="hover:text-white transition-colors duration-300">{t('nav.contact')}</button></li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="font-semibold mb-4">{t('footer.legal')}</h4>
+              <ul className="space-y-2 text-gray-400">
+                <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.privacyPolicy')}</a></li>
+                <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.termsOfService')}</a></li>
+                <li><a href="#" className="hover:text-white transition-colors duration-300">{t('footer.cookiePolicy')}</a></li>
+              </ul>
             </div>
           </div>
-        </footer>
-      </div>
+          
+          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+            <p>{t('footer.copyright')}</p>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }

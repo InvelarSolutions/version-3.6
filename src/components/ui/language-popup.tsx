@@ -59,7 +59,15 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="language-popup-overlay">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+      {/* Backdrop with blur effect */}
+      <div 
+        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+        style={{
+          background: 'radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)'
+        }}
+      />
+      
       {/* Popup Container */}
       <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500">
         <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
