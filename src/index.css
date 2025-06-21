@@ -124,7 +124,7 @@
   border-bottom-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Fixed positioning for logo and navigation */
+/* Fixed positioning for logo */
 .logo {
   position: fixed;
   top: 0;
@@ -136,6 +136,22 @@
   height: 64px; /* Match header height */
   
   /* Subtle text shadow for better readability on transparent background */
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* Language selector positioned in top header, between logo and nav */
+.language-selector {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  height: 64px;
+  
+  /* Subtle text shadow for better readability */
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
@@ -156,14 +172,16 @@
 
 /* Enhanced button styling for glass morphism theme */
 .nav-buttons button,
-.nav-buttons a button {
+.nav-buttons a button,
+.language-selector button {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .nav-buttons button:hover,
-.nav-buttons a button:hover {
+.nav-buttons a button:hover,
+.language-selector button:hover {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   transform: translateY(-1px);
@@ -178,6 +196,13 @@
   
   .logo {
     padding: 12px 10px; /* Reduced mobile padding */
+    height: 56px;
+  }
+  
+  .language-selector {
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 12px 5px; /* Reduced mobile padding */
     height: 56px;
   }
   
@@ -207,4 +232,41 @@
       0 8px 32px rgba(0, 0, 0, 0.3),
       inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
+}
+
+/* Language popup positioning - ensure it appears above everything but doesn't interfere with rings */
+.language-popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10000; /* Higher than rings but allows them to remain visible behind */
+  display: flex;
+  align-items: center;
+  justify-center;
+  background: radial-gradient(circle at center, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%); /* Reduced opacity to show rings */
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Ensure ring patterns remain visible and prominent */
+.ring-pattern-container {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1; /* Low z-index to stay behind content but visible */
+}
+
+/* Ring visibility enhancement */
+.ring-element {
+  opacity: 1 !important; /* Ensure rings are always visible */
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Prevent rings from being hidden by other elements */
+.page-content {
+  position: relative;
+  z-index: 10; /* Above rings but below header elements */
 }
