@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Globe, Check } from 'lucide-react';
@@ -110,7 +110,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999]">
       {/* Backdrop with blur effect */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
@@ -119,8 +119,8 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         }}
       />
       
-      {/* Popup Container - Centered */}
-      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500">
+      {/* Popup Container - Fixed at top */}
+      <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md mx-4 animate-in fade-in-0 slide-in-from-top-4 duration-500">
         <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1f1f1f] p-8 text-center border-b border-gray-700">
@@ -191,11 +191,11 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         </Card>
       </div>
 
-      {/* Decorative Elements */}
+      {/* Decorative Elements - Positioned for top layout */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating orbs for visual appeal - positioned for centered layout */}
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+        {/* Floating orbs for visual appeal - repositioned for top layout */}
+        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+        <div className="absolute top-2/3 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
         <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
     </div>
