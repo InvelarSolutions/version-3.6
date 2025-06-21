@@ -391,14 +391,14 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#1a1a1a] text-white">
+    <div className="min-h-screen bg-[#1a1a1a] text-white overflow-x-hidden">
       {/* Language Selection Popup */}
       <LanguagePopup 
         isOpen={showLanguagePopup} 
         onLanguageSelect={handleLanguageSelect}
       />
 
-      {/* Global Ring Pattern - Behind everything but over backgrounds */}
+      {/* Global Ring Pattern - Behind everything but over backgrounds - MOVED TO TOP */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[1]">
         {/* Calculate maximum ring size needed to fill screen */}
         {Array.from({ length: 30 }, (_, i) => {
@@ -410,7 +410,7 @@ export default function HomePage() {
           
           const baseOpacity = Math.max(0.03, 0.25 - (i * 0.008)); // Reduced base opacity
           
-          // Calculate fade based on distance from center and scroll position
+          // Calculate fade based on distance from center and scroll position - MOVED TO TOP
           const heroHeight = screenDimensions.height * 0.8;
           const aboutSectionStart = heroHeight;
           const aboutSectionHeight = screenDimensions.height * 1.2; // Approximate about section height
@@ -418,8 +418,8 @@ export default function HomePage() {
           // Get current scroll position
           const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
           
-          // Calculate ring position relative to viewport - MOVED LOWER
-          const ringCenterY = (screenDimensions.height * 0.4) - scrollY; // Changed from 0.35 to 0.4 (moved down)
+          // Calculate ring position relative to viewport - MOVED TO TOP (25% from top)
+          const ringCenterY = (screenDimensions.height * 0.25) - scrollY; // Changed from 0.4 to 0.25 (moved to top)
           const ringRadius = size / 2;
           
           // Fade calculation for rings extending into about section
@@ -449,7 +449,7 @@ export default function HomePage() {
                 height: `${size}px`,
                 borderColor: `rgba(107, 114, 128, ${finalOpacity})`,
                 left: '50%',
-                top: '40%', // Changed from 35% to 40% (moved down)
+                top: '25%', // Changed from 40% to 25% (moved to top)
                 transform: 'translate(-50%, -50%)',
               }}
             />
@@ -468,7 +468,7 @@ export default function HomePage() {
           
           // Similar fade calculation for ultra-large rings
           const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-          const ringCenterY = (screenDimensions.height * 0.4) - scrollY; // Changed from 0.35 to 0.4
+          const ringCenterY = (screenDimensions.height * 0.25) - scrollY; // Changed from 0.4 to 0.25 (moved to top)
           const heroHeight = screenDimensions.height * 0.8;
           const aboutSectionStart = heroHeight;
           const aboutSectionHeight = screenDimensions.height * 1.2;
@@ -498,7 +498,7 @@ export default function HomePage() {
                 height: `${size}px`,
                 borderColor: `rgba(107, 114, 128, ${finalOpacity})`,
                 left: '50%',
-                top: '40%', // Changed from 35% to 40% (moved down)
+                top: '25%', // Changed from 40% to 25% (moved to top)
                 transform: 'translate(-50%, -50%)',
               }}
             />
@@ -514,35 +514,35 @@ export default function HomePage() {
         <img
           src="/Invelar Logo.png"
           alt={t('alt.logo')}
-          className="h-16 w-auto"
+          className="h-16 w-auto max-w-full"
         />
       </div>
 
       {/* Fixed Navigation Buttons */}
       <div className="nav-buttons">
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center space-x-8">
+        <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
           <button 
             onClick={() => scrollToSection('about')}
-            className="text-gray-300 hover:text-white transition-colors duration-300"
+            className="text-gray-300 hover:text-white transition-colors duration-300 text-sm lg:text-base"
           >
             {t('nav.about')}
           </button>
           <button 
             onClick={() => scrollToSection('services')}
-            className="text-gray-300 hover:text-white transition-colors duration-300"
+            className="text-gray-300 hover:text-white transition-colors duration-300 text-sm lg:text-base"
           >
             {t('nav.services')}
           </button>
           <button 
             onClick={() => scrollToSection('testimonials')}
-            className="text-gray-300 hover:text-white transition-colors duration-300"
+            className="text-gray-300 hover:text-white transition-colors duration-300 text-sm lg:text-base"
           >
             {t('nav.testimonials')}
           </button>
           <button 
             onClick={() => scrollToSection('contact')}
-            className="text-gray-300 hover:text-white transition-colors duration-300"
+            className="text-gray-300 hover:text-white transition-colors duration-300 text-sm lg:text-base"
           >
             {t('nav.contact')}
           </button>
@@ -557,7 +557,7 @@ export default function HomePage() {
             <MessageCircle className="h-4 w-4 text-black" />
           </Button>
           <NavigationLink to="/contact">
-            <Button className="bg-white text-black hover:bg-gray-100 font-semibold transition-all duration-300 transform hover:scale-105">
+            <Button className="bg-white text-black hover:bg-gray-100 font-semibold transition-all duration-300 transform hover:scale-105 text-sm lg:text-base">
               {t('nav.getStarted')}
             </Button>
           </NavigationLink>
@@ -623,16 +623,16 @@ export default function HomePage() {
         {/* Background Gradient - Behind rings */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-0" />
 
-        {/* Content - In front of rings - MOVED EVEN HIGHER */}
+        {/* Content - In front of rings - MOVED HIGHER TO ALIGN WITH RINGS */}
         <div className="relative max-w-6xl mx-auto text-center z-20 flex flex-col justify-center min-h-[calc(100vh-20rem)]">
           <div className="mb-6">
             <img
               src="/Invelar Logo.png"
               alt={t('alt.logo')}
-              className="mx-auto h-32 md:h-48 w-auto"
+              className="mx-auto h-32 md:h-48 w-auto max-w-full"
             />
           </div>
-          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide">
+          <p className="text-lg md:text-xl text-gray-400 mb-12 max-w-3xl mx-auto leading-relaxed font-light tracking-wide px-4">
             {t('hero.tagline')}
           </p>
           <NavigationLink to="/contact">
@@ -1048,7 +1048,7 @@ export default function HomePage() {
                 <img
                   src="/Invelar Logo.png"
                   alt={t('alt.logo')}
-                  className="h-16 w-auto"
+                  className="h-16 w-auto max-w-full"
                 />
               </div>
               <p className="text-gray-400 mb-4">
@@ -1082,7 +1082,7 @@ export default function HomePage() {
                         </button>
                       </div>
                       <div className="flex items-center space-x-2">
-                        <p className="text-gray-300 text-sm font-mono">invelarsolutions@gmail.com</p>
+                        <p className="text-gray-300 text-sm font-mono break-all">invelarsolutions@gmail.com</p>
                       </div>
                       {emailCopied && (
                         <p className="text-green-400 text-xs mt-2 animate-in fade-in-0 duration-200">
