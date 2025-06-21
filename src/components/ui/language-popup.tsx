@@ -46,6 +46,57 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  // Prevent background scrolling when popup is open
+  useEffect(() => {
+    if (isOpen) {
+      // Save current scroll position
+      const scrollY = window.scrollY;
+      
+      // Prevent scrolling by setting body styles
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.overflow = 'hidden';
+      
+      // Store scroll position for restoration
+      document.body.setAttribute('data-scroll-y', scrollY.toString());
+    } else {
+      // Restore scrolling when popup closes
+      const scrollY = document.body.getAttribute('data-scroll-y');
+      
+      // Reset body styles
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.overflow = '';
+      
+      // Restore scroll position
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY, 10));
+        document.body.removeAttribute('data-scroll-y');
+      }
+    }
+
+    // Cleanup function to ensure styles are reset if component unmounts
+    return () => {
+      if (isOpen) {
+        const scrollY = document.body.getAttribute('data-scroll-y');
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.overflow = '';
+        
+        if (scrollY) {
+          window.scrollTo(0, parseInt(scrollY, 10));
+          document.body.removeAttribute('data-scroll-y');
+        }
+      }
+    };
+  }, [isOpen]);
+
   const handleLanguageSelect = (languageCode: string) => {
     setSelectedLanguage(languageCode);
     setIsAnimating(true);
@@ -59,7 +110,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-8">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop with blur effect */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
@@ -68,8 +119,8 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         }}
       />
       
-      {/* Popup Container - Positioned at top */}
-      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 slide-in-from-top-4 duration-500">
+      {/* Popup Container - Centered */}
+      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500">
         <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1f1f1f] p-8 text-center border-b border-gray-700">
@@ -142,10 +193,10 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
 
       {/* Decorative Elements */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating orbs for visual appeal - positioned for top layout */}
-        <div className="absolute top-1/6 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-        <div className="absolute top-1/3 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/4 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
+        {/* Floating orbs for visual appeal - positioned for centered layout */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
     </div>
   );
