@@ -398,7 +398,7 @@ export default function HomePage() {
         onLanguageSelect={handleLanguageSelect}
       />
 
-      {/* Global Ring Pattern - Behind everything but over backgrounds - MOVED TO TOP */}
+      {/* Global Ring Pattern - Behind everything but over backgrounds - LIGHTER GREY */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[1]">
         {/* Calculate maximum ring size needed to fill screen */}
         {Array.from({ length: 30 }, (_, i) => {
@@ -408,7 +408,7 @@ export default function HomePage() {
           // Only render rings that are needed to fill the screen
           if (size > maxScreenDimension * 1.8) return null;
           
-          const baseOpacity = Math.max(0.03, 0.25 - (i * 0.008)); // Reduced base opacity
+          const baseOpacity = Math.max(0.08, 0.35 - (i * 0.008)); // Increased base opacity for lighter grey
           
           // Calculate fade based on distance from center and scroll position - MOVED TO TOP
           const heroHeight = screenDimensions.height * 0.8;
@@ -431,10 +431,10 @@ export default function HomePage() {
             const maxExtension = aboutSectionHeight * 0.6; // Allow rings to extend 60% into about section
             
             if (extensionIntoAbout > maxExtension) {
-              fadeMultiplier = 0.05; // Very faded but still visible
+              fadeMultiplier = 0.15; // Increased from 0.05 for lighter visibility
             } else {
               // Gradual fade as rings extend into about section
-              fadeMultiplier = 1 - (extensionIntoAbout / maxExtension) * 0.8;
+              fadeMultiplier = 1 - (extensionIntoAbout / maxExtension) * 0.6; // Reduced fade amount
             }
           }
           
@@ -443,11 +443,11 @@ export default function HomePage() {
           return (
             <div
               key={i}
-              className="absolute rounded-full border border-gray-600"
+              className="absolute rounded-full border border-gray-400" // Changed from border-gray-600 to border-gray-400 for lighter grey
               style={{
                 width: `${size}px`,
                 height: `${size}px`,
-                borderColor: `rgba(107, 114, 128, ${finalOpacity})`,
+                borderColor: `rgba(156, 163, 175, ${finalOpacity})`, // Changed from 107, 114, 128 to 156, 163, 175 for lighter grey
                 left: '50%',
                 top: '25%', // Changed from 40% to 25% (moved to top)
                 transform: 'translate(-50%, -50%)',
@@ -464,7 +464,7 @@ export default function HomePage() {
           // Only render if needed for screen coverage
           if (size > maxScreenDimension * 2.5) return null;
           
-          const baseOpacity = Math.max(0.01, 0.08 - (i * 0.004)); // Very subtle outer rings
+          const baseOpacity = Math.max(0.03, 0.15 - (i * 0.004)); // Increased base opacity for lighter grey
           
           // Similar fade calculation for ultra-large rings
           const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
@@ -481,9 +481,9 @@ export default function HomePage() {
             const maxExtension = aboutSectionHeight * 0.8; // Allow more extension for ultra-large rings
             
             if (extensionIntoAbout > maxExtension) {
-              fadeMultiplier = 0.02;
+              fadeMultiplier = 0.08; // Increased from 0.02 for lighter visibility
             } else {
-              fadeMultiplier = 1 - (extensionIntoAbout / maxExtension) * 0.9;
+              fadeMultiplier = 1 - (extensionIntoAbout / maxExtension) * 0.7; // Reduced fade amount
             }
           }
           
@@ -492,11 +492,11 @@ export default function HomePage() {
           return (
             <div
               key={`ultra-${i}`}
-              className="absolute rounded-full border border-gray-600"
+              className="absolute rounded-full border border-gray-400" // Changed from border-gray-600 to border-gray-400 for lighter grey
               style={{
                 width: `${size}px`,
                 height: `${size}px`,
-                borderColor: `rgba(107, 114, 128, ${finalOpacity})`,
+                borderColor: `rgba(156, 163, 175, ${finalOpacity})`, // Changed from 107, 114, 128 to 156, 163, 175 for lighter grey
                 left: '50%',
                 top: '25%', // Changed from 40% to 25% (moved to top)
                 transform: 'translate(-50%, -50%)',
