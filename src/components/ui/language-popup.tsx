@@ -59,7 +59,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-8">
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-24">
       {/* Backdrop with blur effect */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
