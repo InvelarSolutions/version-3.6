@@ -2,8 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { 
-  Workflow, 
-  Bot, 
   Settings, 
   ArrowRight, 
   Star, 
@@ -847,33 +845,9 @@ export default function HomePage() {
               {t('services.subtitle')}
             </p>
             
-            {/* Core Services Grid */}
-            <div className="grid lg:grid-cols-3 md:grid-cols-2 gap-8 mb-16">
+            {/* Core Services Grid - Removed Workflow Automation and AI Agents */}
+            <div className="grid lg:grid-cols-2 md:grid-cols-2 gap-8 mb-16">
               {[
-                {
-                  icon: Workflow,
-                  title: t('services.workflow.title'),
-                  description: t('services.workflow.description'),
-                  features: [
-                    t('services.workflow.feature1'),
-                    t('services.workflow.feature2'),
-                    t('services.workflow.feature3'),
-                    t('services.workflow.feature4')
-                  ],
-                  color: "text-blue-400"
-                },
-                {
-                  icon: Bot,
-                  title: t('services.aiAgents.title'),
-                  description: t('services.aiAgents.description'),
-                  features: [
-                    t('services.aiAgents.feature1'),
-                    t('services.aiAgents.feature2'),
-                    t('services.aiAgents.feature3'),
-                    t('services.aiAgents.feature4')
-                  ],
-                  color: "text-purple-400"
-                },
                 {
                   icon: MessageCircle,
                   title: t('services.chatbot.title'),
