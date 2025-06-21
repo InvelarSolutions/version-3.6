@@ -145,7 +145,7 @@ const useIntersectionObserver = (options = {}) => {
 };
 
 export default function HomePage() {
-  const { t, showLanguagePopup, setLanguage, currentLanguage } = useLanguageContext();
+  const { t, showLanguagePopup, setLanguage, hideLanguagePopup, currentLanguage } = useLanguageContext();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showEmailBubble, setShowEmailBubble] = useState(false);
   const [emailCopied, setEmailCopied] = useState(false);
@@ -392,10 +392,11 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#1a1a1a] text-white">
-      {/* Language Selection Popup */}
+      {/* Language Selection Popup - Now at top of page */}
       <LanguagePopup 
         isOpen={showLanguagePopup} 
         onLanguageSelect={handleLanguageSelect}
+        onClose={hideLanguagePopup}
       />
 
       {/* Global Ring Pattern - Behind everything but over backgrounds */}
@@ -618,8 +619,8 @@ export default function HomePage() {
         )}
       </div>
 
-      {/* Hero Section - Adjusted padding to account for fixed header */}
-      <section className="relative px-4 pt-32 pb-32 overflow-hidden min-h-screen">
+      {/* Hero Section - Adjusted padding to account for fixed header and language popup */}
+      <section className={`relative px-4 pt-32 pb-32 overflow-hidden min-h-screen ${showLanguagePopup ? 'pt-48' : 'pt-32'}`}>
         {/* Background Gradient - Behind rings */}
         <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a] to-[#151515] z-0" />
 

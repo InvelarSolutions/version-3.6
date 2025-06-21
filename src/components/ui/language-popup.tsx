@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { Globe, Check } from 'lucide-react';
+import { Globe, Check, X } from 'lucide-react';
 
 interface LanguagePopupProps {
   isOpen: boolean;
   onLanguageSelect: (language: string) => void;
+  onClose: () => void;
 }
 
 interface Language {
@@ -42,7 +43,7 @@ const languages: Language[] = [
   }
 ];
 
-export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) {
+export function LanguagePopup({ isOpen, onLanguageSelect, onClose }: LanguagePopupProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
 
@@ -56,96 +57,100 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
     }, 300);
   };
 
+  const handleClose = () => {
+    setIsAnimating(true);
+    setTimeout(() => {
+      onClose();
+    }, 200);
+  };
+
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
-      {/* Backdrop with blur effect */}
-      <div 
-        className="absolute inset-0 bg-black/60 backdrop-blur-md"
-        style={{
-          background: 'radial-gradient(circle at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.8) 100%)'
-        }}
-      />
-      
-      {/* Popup Container */}
-      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500">
-        <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
-          {/* Header */}
-          <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1f1f1f] p-8 text-center border-b border-gray-700">
-            <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
-              <Globe className="h-8 w-8 text-black" />
-            </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Choose Your Language</h2>
-            <p className="text-gray-400 text-sm">Select your preferred language to continue</p>
-          </div>
-
-          {/* Language Options */}
-          <CardContent className="p-6 space-y-3">
-            {languages.map((language, index) => (
+    <div className="fixed top-0 left-0 right-0 z-[9999] bg-[#1a1a1a] border-b border-gray-700 shadow-lg animate-in slide-in-from-top duration-500">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <Card className="bg-[#2a2a2a] border-gray-600 shadow-xl">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center space-x-3">
+                <div className="bg-white rounded-full w-10 h-10 flex items-center justify-center">
+                  <Globe className="h-5 w-5 text-black" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white">Choose Your Language</h3>
+                  <p className="text-gray-400 text-sm">Select your preferred language to continue</p>
+                </div>
+              </div>
+              
+              {/* Close Button */}
               <button
-                key={language.code}
-                onClick={() => handleLanguageSelect(language.code)}
-                disabled={isAnimating}
-                className={`
-                  w-full p-4 rounded-xl border-2 transition-all duration-300 group
-                  hover:border-white hover:bg-[#2a2a2a] hover:shadow-lg hover:scale-[1.02]
-                  focus:outline-none focus:border-white focus:bg-[#2a2a2a]
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  ${selectedLanguage === language.code 
-                    ? 'border-green-400 bg-green-400/10 shadow-lg scale-[1.02]' 
-                    : 'border-gray-600 bg-[#1a1a1a]'
-                  }
-                `}
-                style={{
-                  animationDelay: `${index * 100}ms`
-                }}
+                onClick={handleClose}
+                className="text-gray-400 hover:text-white transition-colors duration-200 p-2 hover:bg-gray-700 rounded-lg"
+                title="Close"
               >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <span className="text-3xl">{language.flag}</span>
-                    <div className="text-left">
-                      <h3 className="text-white font-semibold text-lg group-hover:text-white transition-colors">
-                        {language.nativeName}
-                      </h3>
-                      <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors">
-                        {language.description}
-                      </p>
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Language Options - Horizontal Layout */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {languages.map((language, index) => (
+                <button
+                  key={language.code}
+                  onClick={() => handleLanguageSelect(language.code)}
+                  disabled={isAnimating}
+                  className={`
+                    p-4 rounded-lg border-2 transition-all duration-300 group text-left
+                    hover:border-white hover:bg-[#1a1a1a] hover:shadow-lg hover:scale-[1.02]
+                    focus:outline-none focus:border-white focus:bg-[#1a1a1a]
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    ${selectedLanguage === language.code 
+                      ? 'border-green-400 bg-green-400/10 shadow-lg scale-[1.02]' 
+                      : 'border-gray-600 bg-[#1a1a1a]'
+                    }
+                  `}
+                  style={{
+                    animationDelay: `${index * 100}ms`
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3">
+                      <span className="text-2xl">{language.flag}</span>
+                      <div>
+                        <h4 className="text-white font-semibold group-hover:text-white transition-colors">
+                          {language.nativeName}
+                        </h4>
+                        <p className="text-gray-400 text-sm group-hover:text-gray-300 transition-colors">
+                          {language.description}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Selection Indicator */}
+                    <div className={`
+                      w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-300
+                      ${selectedLanguage === language.code 
+                        ? 'border-green-400 bg-green-400' 
+                        : 'border-gray-500 group-hover:border-gray-300'
+                      }
+                    `}>
+                      {selectedLanguage === language.code && (
+                        <Check className="h-3 w-3 text-white animate-in zoom-in-50 duration-200" />
+                      )}
                     </div>
                   </div>
-                  
-                  {/* Selection Indicator */}
-                  <div className={`
-                    w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300
-                    ${selectedLanguage === language.code 
-                      ? 'border-green-400 bg-green-400' 
-                      : 'border-gray-500 group-hover:border-gray-300'
-                    }
-                  `}>
-                    {selectedLanguage === language.code && (
-                      <Check className="h-3 w-3 text-white animate-in zoom-in-50 duration-200" />
-                    )}
-                  </div>
-                </div>
-              </button>
-            ))}
+                </button>
+              ))}
+            </div>
+
+            {/* Footer Note */}
+            <div className="mt-4 pt-4 border-t border-gray-600">
+              <p className="text-center text-xs text-gray-500">
+                You can change your language preference at any time in settings
+              </p>
+            </div>
           </CardContent>
-
-          {/* Footer */}
-          <div className="bg-[#0f0f0f] p-4 border-t border-gray-700">
-            <p className="text-center text-xs text-gray-500">
-              You can change your language preference at any time in settings
-            </p>
-          </div>
         </Card>
-      </div>
-
-      {/* Decorative Elements */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating orbs for visual appeal */}
-        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-        <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
     </div>
   );
