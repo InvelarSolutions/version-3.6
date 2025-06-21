@@ -398,7 +398,7 @@ export default function HomePage() {
         onLanguageSelect={handleLanguageSelect}
       />
 
-      {/* Global Ring Pattern - Behind everything but over backgrounds - CENTERED AROUND LOGO */}
+      {/* Global Ring Pattern - Behind everything but over backgrounds - RAISED HIGHER */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden z-[1]">
         {/* Calculate maximum ring size needed to fill screen */}
         {Array.from({ length: 30 }, (_, i) => {
@@ -410,7 +410,7 @@ export default function HomePage() {
           
           const baseOpacity = Math.max(0.08, 0.35 - (i * 0.008)); // Increased base opacity for lighter grey
           
-          // Calculate fade based on distance from center and scroll position - CENTERED AROUND LOGO
+          // Calculate fade based on distance from center and scroll position - RAISED HIGHER
           const heroHeight = screenDimensions.height * 0.8;
           const aboutSectionStart = heroHeight;
           const aboutSectionHeight = screenDimensions.height * 1.2; // Approximate about section height
@@ -418,8 +418,8 @@ export default function HomePage() {
           // Get current scroll position
           const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
           
-          // Calculate ring position relative to viewport - CENTERED AROUND LOGO (8% from top)
-          const ringCenterY = (screenDimensions.height * 0.08) - scrollY; // Changed from 0.25 to 0.08 (centered around logo)
+          // Calculate ring position relative to viewport - RAISED HIGHER (5% from top)
+          const ringCenterY = (screenDimensions.height * 0.05) - scrollY; // Changed from 0.08 to 0.05 (raised higher)
           const ringRadius = size / 2;
           
           // Fade calculation for rings extending into about section
@@ -449,7 +449,7 @@ export default function HomePage() {
                 height: `${size}px`,
                 borderColor: `rgba(156, 163, 175, ${finalOpacity})`, // Changed from 107, 114, 128 to 156, 163, 175 for lighter grey
                 left: '50%',
-                top: '8%', // Changed from 25% to 8% (centered around logo)
+                top: '5%', // Changed from 8% to 5% (raised higher)
                 transform: 'translate(-50%, -50%)',
               }}
             />
@@ -468,7 +468,7 @@ export default function HomePage() {
           
           // Similar fade calculation for ultra-large rings
           const scrollY = typeof window !== 'undefined' ? window.scrollY : 0;
-          const ringCenterY = (screenDimensions.height * 0.08) - scrollY; // Changed from 0.25 to 0.08 (centered around logo)
+          const ringCenterY = (screenDimensions.height * 0.05) - scrollY; // Changed from 0.08 to 0.05 (raised higher)
           const heroHeight = screenDimensions.height * 0.8;
           const aboutSectionStart = heroHeight;
           const aboutSectionHeight = screenDimensions.height * 1.2;
@@ -498,7 +498,7 @@ export default function HomePage() {
                 height: `${size}px`,
                 borderColor: `rgba(156, 163, 175, ${finalOpacity})`, // Changed from 107, 114, 128 to 156, 163, 175 for lighter grey
                 left: '50%',
-                top: '8%', // Changed from 25% to 8% (centered around logo)
+                top: '5%', // Changed from 8% to 5% (raised higher)
                 transform: 'translate(-50%, -50%)',
               }}
             />
