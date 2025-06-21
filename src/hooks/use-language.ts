@@ -11,13 +11,19 @@ interface LanguageHook {
 
 export function useLanguage(): LanguageHook {
   const [currentLanguage, setCurrentLanguage] = useState<SupportedLanguage>('en');
-  const [showLanguagePopup, setShowLanguagePopup] = useState(true); // Always show on load
+  const [showLanguagePopup, setShowLanguagePopup] = useState(false);
 
   useEffect(() => {
-    // Get saved language from localStorage if it exists
+    // Check if user has already selected a language
     const savedLanguage = localStorage.getItem('invelar-language') as SupportedLanguage;
+    
     if (savedLanguage && ['en', 'pt', 'fr'].includes(savedLanguage)) {
+      // User has already selected a language, don't show popup
       setCurrentLanguage(savedLanguage);
+      setShowLanguagePopup(false);
+    } else {
+      // User hasn't selected a language yet, show popup
+      setShowLanguagePopup(true);
     }
   }, []);
 

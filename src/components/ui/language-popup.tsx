@@ -118,21 +118,36 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
     }, 300);
   };
 
+  // Always render the popup when isOpen is true, with explicit visibility
   if (!isOpen) return null;
 
   return (
     <div 
-      className="fixed inset-0 flex items-center justify-center p-4"
       style={{ 
-        zIndex: 99999,
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        backdropFilter: 'blur(8px)'
+        position: 'fixed',
+        top: '0',
+        left: '0',
+        right: '0',
+        bottom: '0',
+        zIndex: 999999,
+        backgroundColor: 'rgba(0, 0, 0, 0.85)',
+        backdropFilter: 'blur(12px)',
+        WebkitBackdropFilter: 'blur(12px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '1rem'
       }}
     >
       {/* Popup Container - Centered in viewport */}
       <div 
         ref={modalRef}
-        className="relative w-full max-w-md animate-in fade-in-0 zoom-in-95 duration-500"
+        className="relative w-full max-w-md"
+        style={{
+          animation: 'fadeInScale 0.5s ease-out forwards',
+          transform: 'scale(0.9)',
+          opacity: '0'
+        }}
         tabIndex={-1}
         role="dialog"
         aria-modal="true"
@@ -196,7 +211,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
                     }
                   `}>
                     {selectedLanguage === language.code && (
-                      <Check className="h-3 w-3 text-white animate-in zoom-in-50 duration-200" />
+                      <Check className="h-3 w-3 text-white" style={{ animation: 'zoomIn 0.2s ease-out' }} />
                     )}
                   </div>
                 </div>
@@ -212,6 +227,29 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
           </div>
         </Card>
       </div>
+
+      {/* Add CSS animations inline */}
+      <style jsx>{`
+        @keyframes fadeInScale {
+          from {
+            opacity: 0;
+            transform: scale(0.9) translateY(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: scale(1) translateY(0);
+          }
+        }
+
+        @keyframes zoomIn {
+          from {
+            transform: scale(0);
+          }
+          to {
+            transform: scale(1);
+          }
+        }
+      `}</style>
     </div>
   );
 }
