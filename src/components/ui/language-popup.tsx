@@ -59,7 +59,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+    <div className="fixed inset-0 z-[9999] flex items-start justify-center pt-8">
       {/* Backdrop with blur effect */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
@@ -69,7 +69,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
       />
       
       {/* Popup Container */}
-      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500">
+      <div className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 slide-in-from-top-4 duration-500">
         <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1f1f1f] p-8 text-center border-b border-gray-700">
