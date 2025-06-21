@@ -45,6 +45,7 @@ const languages: Language[] = [
 export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) {
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
+  const modalRef = useRef<HTMLDivElement>(null);
 
   // Prevent background scrolling when popup is open
   useEffect(() => {
@@ -58,6 +59,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
       document.body.style.left = '0';
       document.body.style.right = '0';
       document.body.style.overflow = 'hidden';
+      document.body.style.width = '100%';
       
       // Store scroll position for restoration
       document.body.setAttribute('data-scroll-y', scrollY.toString());
@@ -71,6 +73,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
       document.body.style.left = '';
       document.body.style.right = '';
       document.body.style.overflow = '';
+      document.body.style.width = '';
       
       // Restore scroll position
       if (scrollY) {
@@ -88,6 +91,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         document.body.style.left = '';
         document.body.style.right = '';
         document.body.style.overflow = '';
+        document.body.style.width = '';
         
         if (scrollY) {
           window.scrollTo(0, parseInt(scrollY, 10));
@@ -95,6 +99,13 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         }
       }
     };
+  }, [isOpen]);
+
+  // Focus management for accessibility
+  useEffect(() => {
+    if (isOpen && modalRef.current) {
+      modalRef.current.focus();
+    }
   }, [isOpen]);
 
   const handleLanguageSelect = (languageCode: string) => {
@@ -110,7 +121,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999]">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center">
       {/* Backdrop with blur effect */}
       <div 
         className="absolute inset-0 bg-black/60 backdrop-blur-md"
@@ -119,15 +130,24 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         }}
       />
       
-      {/* Popup Container - Fixed at top */}
-      <div className="fixed top-8 left-1/2 transform -translate-x-1/2 z-10 w-full max-w-md mx-4 animate-in fade-in-0 slide-in-from-top-4 duration-500">
+      {/* Popup Container - Centered in viewport */}
+      <div 
+        ref={modalRef}
+        className="relative z-10 w-full max-w-md mx-4 animate-in fade-in-0 zoom-in-95 duration-500"
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="language-modal-title"
+      >
         <Card className="bg-[#1a1a1a] border-gray-700 shadow-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-gradient-to-r from-[#2a2a2a] to-[#1f1f1f] p-8 text-center border-b border-gray-700">
             <div className="bg-white rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 shadow-lg">
               <Globe className="h-8 w-8 text-black" />
             </div>
-            <h2 className="text-2xl font-bold text-white mb-2">Choose Your Language</h2>
+            <h2 id="language-modal-title" className="text-2xl font-bold text-white mb-2">
+              Choose Your Language
+            </h2>
             <p className="text-gray-400 text-sm">Select your preferred language to continue</p>
           </div>
 
@@ -141,7 +161,7 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
                 className={`
                   w-full p-4 rounded-xl border-2 transition-all duration-300 group
                   hover:border-white hover:bg-[#2a2a2a] hover:shadow-lg hover:scale-[1.02]
-                  focus:outline-none focus:border-white focus:bg-[#2a2a2a]
+                  focus:outline-none focus:border-white focus:bg-[#2a2a2a] focus:ring-2 focus:ring-white/20
                   disabled:opacity-50 disabled:cursor-not-allowed
                   ${selectedLanguage === language.code 
                     ? 'border-green-400 bg-green-400/10 shadow-lg scale-[1.02]' 
@@ -151,10 +171,13 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
                 style={{
                   animationDelay: `${index * 100}ms`
                 }}
+                aria-label={`Select ${language.nativeName}`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
-                    <span className="text-3xl">{language.flag}</span>
+                    <span className="text-3xl" role="img" aria-label={`${language.name} flag`}>
+                      {language.flag}
+                    </span>
                     <div className="text-left">
                       <h3 className="text-white font-semibold text-lg group-hover:text-white transition-colors">
                         {language.nativeName}
@@ -191,11 +214,11 @@ export function LanguagePopup({ isOpen, onLanguageSelect }: LanguagePopupProps) 
         </Card>
       </div>
 
-      {/* Decorative Elements - Positioned for top layout */}
+      {/* Decorative Elements - Positioned for centered layout */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {/* Floating orbs for visual appeal - repositioned for top layout */}
-        <div className="absolute top-1/3 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
-        <div className="absolute top-2/3 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
+        {/* Floating orbs for visual appeal - repositioned for centered layout */}
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-blue-500/10 rounded-full blur-xl animate-pulse" />
+        <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-purple-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
         <div className="absolute top-1/2 right-1/3 w-16 h-16 bg-green-500/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2s' }} />
       </div>
     </div>
